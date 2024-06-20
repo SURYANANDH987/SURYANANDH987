@@ -1,0 +1,85 @@
+class Student:
+    def _init_(self, name):
+        self.name = name
+        self.grades = {}
+
+    def add_grade(self, subject, grade):
+        if subject in self.grades:
+            self.grades[subject].append(grade)
+        else:
+            self.grades[subject] = [grade]
+
+    def calculate_average_grade(self):
+        total = 0
+        count = 0
+        for subject, grades in self.grades.items():
+            total += sum(grades)
+            count += len(grades)
+        if count == 0:
+            return 0
+        return total / count
+
+    def calculate_gpa(self):
+        gpa = 0
+        total_credit_units = 0
+        for subject, grades in self.grades.items():
+            credit_units = len(grades)
+            total_credit_units += credit_units
+            subject_gpa = sum(grades) / credit_units
+            gpa += subject_gpa
+        if total_credit_units == 0:
+            return 0
+        return gpa / len(self.grades)
+
+    def get_letter_grade(self, grade):
+        if grade >= 90:
+            return 'A'
+        elif grade >= 80:
+            return 'B'
+        elif grade >= 70:
+            return 'C'
+        elif grade >= 60:
+            return 'D'
+        else:
+            return 'F'
+
+    def display_info(self):
+        print(f"Student Name: {self.name}")
+        print("Grades:")
+        for subject, grades in self.grades.items():
+            print(f"{subject}: {grades} | Average Grade: {sum(grades)/len(grades)} | Letter Grade: {self.get_letter_grade(sum(grades)/len(grades))}")
+        average_grade = self.calculate_average_grade()
+        print(f"Average Grade: {average_grade}")
+        gpa = self.calculate_gpa()
+        print(f"GPA: {gpa:.2f}")
+
+
+def main():
+    student_name = input("Enter student name: ")
+    student = Student(student_name)
+
+    while True:
+        print("\nOptions:")
+        print("1. Add Grade")
+        print("2. Calculate Average Grade")
+        print("3. Calculate GPA")
+        print("4. Display Student Information")
+        print("5. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            subject = input("Enter subject name: ")
+            grade = float(input("Enter grade: "))
+            student.add_grade(subject, grade)
+        elif choice == "2":
+            average_grade = student.calculate_average_grade()
+            print(f"Average Grade: {average_grade}")
+        elif choice == "3":
+            gpa = student.calculate_gpa()
+            print(f"GPA: {gpa:.2f}")
+        elif choice == "4":
+            student.display_info()
+        elif choice == "5":
+            break
+        else:
+            print("Invalid choice. Please try again.")
